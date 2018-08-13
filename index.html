@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>LRC Editor</title>
+    <style>
+      body {
+        color: #0a2b36;
+      }
+      textarea {
+        overflow-y: scroll;
+        color: #0a2b36;
+        font-size: 12px;
+        margin: 5px 90px 10px 0;
+        border: 1px solid gainsboro;
+        outline: none;
+      }
+      button:hover {
+        cursor: pointer;
+        background: #eff2f7;
+      }
+      button {
+        margin-right: 5px;
+        height: 19px;
+        border: 1px solid #96a1b1;
+        background: lightsteelblue;
+        color: #323c4c;
+        border-radius: 3px;
+        box-shadow: 1px 2px #323c4c;
+      }
+      .nav button {
+        height: 30px;
+      }
+      .lrc-rows-container {
+        max-height: 415px;
+        overflow: scroll;
+        overflow-x: hidden;
+        background: #495C70;
+        padding: 10px;
+        box-shadow: 1px 1px 5px grey;
+      }
+      .lrc-row button {
+        background: #74777d;
+        color: #355565;
+      }
+      .lrc-row button:hover {
+        background:lightsteelblue;
+      }
+      
+      /* style scrollbar */
+      ::-webkit-scrollbar {     
+        background-color: #e8e8e8;
+        width: .8em
+      }
+      ::-webkit-scrollbar-thumb:window-inactive,
+      ::-webkit-scrollbar-thumb {
+        background:  #c1c1c1;
+      }
+      /* style input */
+      .input-style {
+        border: none;
+        border-bottom: 1px dashed #83A4C5;
+        background: transparent;
+        outline: none;
+        color: #d3dce6;
+        margin: 5px;
+      }
+      .input-style:focus {
+        border-bottom: 1px dashed #03A9F4;
+      }
+
+      .app-container {
+        width: 700px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      /* upload section */
+      .media-upload, 
+      .lyrics-upload {
+        background-color: #eff2f7;
+        padding: 20px;
+      }
+      .upload-method {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      /* submit button */
+      .button-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .submit-btn:hover {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+        <h1>LRC Editor</h1>
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        <form id="uploadForm" class="upload-section">
+          <div class="media-upload">
+            <h4>Upload Music File</h4>
+            <input id="song" type="file" name="media" accept="audio/*" style="margin-top:10px;" required>
+          </div>
+          <br>
+          <div class="lyrics-upload">
+            <h4>Upload Lyrics</h4>
+            <select id="upload-select">
+              <option value="paste">Paste Lyrics</option>
+              <option value="edit">Edit Exist LRC File</option>
+            </select>
+            <div class="upload-method">
+                <div class="paste-lyrics">
+                  <label for="lyrics">Paste Lyrics (Ctrl+v or Cmd+v): </label><br>
+                  <textarea name="lyrics" id="lyrics" cols="50" rows="10" value=""></textarea>
+                </div>
+                <div class="upload-file" style="display:none;">
+                    <label for="lyricsFile">Edit Exist LRC File: </label><br>
+                    <input id="lrcFile" type="file" name="lrcFile" accept=".doc,.docx, .lrc, .txt" style="margin-top:10px;">
+                </div>
+            </div>
+          </div>
+          <div id="error" style="color: #eca1a6;"></div>
+          <div class="button-container">
+            <input type="submit" class="submit-btn">
+          </div>
+        </form>
+    
+        <form id="editForm" style="display:none;">
+          <div style="margin-bottom:10px;">
+              <span>Current Time:</span>
+              <span id="currentTime">00:00.00</span>
+          </div>
+          <div id="lrc" class="lrc-rows-container"></div>
+          <br>
+          <hr>
+          <div style="display:flex;" class="nav">
+            <button id="backBtn" type="button">Back</button>
+            <button id="saveBtn" type="button">Save</button>
+            <button id="resetAudioBtn" type="button">Reset Audio</button>
+            <div id="audio-holder" style="padding:0 5px;">
+              <audio id="myAudio" src="" controls></audio>
+            </div>
+          </div>
+        </form>
+    </div>
+    
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+  </body>
+</html>
