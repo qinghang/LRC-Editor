@@ -1,7 +1,7 @@
 {
   "name": "lrc-editor",
   "version": "1.0.0",
-  "description": "A real time editor for editting lrc files",
+  "description": "A program to help people to synchronize their lyrics with songs(.lrc)",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

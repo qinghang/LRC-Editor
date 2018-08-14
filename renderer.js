@@ -13,7 +13,7 @@
   const $currentTime = $('#currentTime')
   const audio = $('#myAudio')
   let errorMessage = ''
-  let file_lyric = []
+  let lyricFromFile = []
 
   // event listeners
   $uploadForm.addEventListener('submit', submitData, false)
@@ -27,7 +27,7 @@
   })
   $('#lrcFile').addEventListener('change', function () {
     const lrcfilePath = this.files[0].path
-    file_lyric = readfile(lrcfilePath)
+    lyricFromFile = readfile(lrcfilePath)
   })
 
   audio.addEventListener('timeupdate', function () {
@@ -36,6 +36,36 @@
   })
 
   // functions
+  function submitData (e) {
+    e.preventDefault()
+    validateLyrics();
+    if(errorMessage !== ''){
+      return false;
+    }
+    printEditForm(get_lyrics())
+    addClickToBtns()
+    goToEditPage()
+  }
+
+  function addClickToBtns(){
+    $$('.enterTimeBtn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        this.nextSibling.value = $currentTime.innerHTML
+      })
+    })
+    $$('.jumpTimeBtn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const timeStr = this.nextSibling.nextSibling.value
+        audio.currentTime = convertTime(timeStr)
+      })
+    })
+  }
+
+  function goToEditPage(){
+    $uploadForm.style.display = 'none'
+    $editForm.style.display = 'block'
+  }
+
   function validateLyrics() {
     const val = $('#upload-select').value;
     if(val === 'paste' && $('#lyrics').value === '' || val === 'edit' && $('#lrcFile').files.length == 0){
@@ -50,57 +80,46 @@
   function showChoice() {
     const val = $('#upload-select').value;
     if(val === 'paste'){
-      $('.paste-lyrics').style.display = 'block';
-      $('.upload-file').style.display = 'none';
+      showPasteLyricsOption()
     }
     if(val === 'edit'){
-      $('.paste-lyrics').style.display = 'none';
-      $('.upload-file').style.display = 'block';
+      showUploadFileOption()
     }
   }
 
-  function submitData (e) {
-    e.preventDefault()
-    validateLyrics();
-    if(errorMessage !== ''){
-      return false;
-    }
-    printEditForm(get_lyrics())
+  function showPasteLyricsOption(){
+    $('.paste-lyrics').style.display = 'block';
+    $('.upload-file').style.display = 'none';
+  }
 
-    $$('.enterTimeBtn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        this.nextSibling.value = $currentTime.innerHTML
-      })
-    })
-    $$('.jumpTimeBtn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const timeStr = this.nextSibling.nextSibling.value
-        audio.currentTime = convertTime(timeStr)
-      })
-    })
-    $uploadForm.style.display = 'none'
-    $editForm.style.display = 'block'
+  function showUploadFileOption(){
+    $('.paste-lyrics').style.display = 'none';
+    $('.upload-file').style.display = 'block';
   }
 
   function get_lyrics() {
     let lyric_arr = []
     const val = $('#upload-select').value;
     if(val === 'paste'){
-      lyric_arr = lyricPaste()
+      lyric_arr = lyricFromPaste()
     }
     if(val === 'edit'){
-      lyric_arr = file_lyric
+      lyric_arr = lyricFromFile
     }
     return lyric_arr
   }
 
-  function backToInit () {
+  function goToStartPage(){
     $uploadForm.style.display = 'block'
     $editForm.style.display = 'none'
+  }
+
+  function backToInit () {
+    goToStartPage()
     resetAudio ()
   }
 
-  function lyricPaste () {
+  function lyricFromPaste () {
     const lyric_lines = $('#lyrics').value.split('\n')
     let lyricArr = []
     lyric_lines.forEach(function (line) {
@@ -111,7 +130,7 @@
     return lyricArr
   }
 
-  function printLrc () {
+  function serializeInputs () {
     let lrc = ''
     const inputs = $editForm.querySelectorAll('input')
     inputs.forEach(function (input) {
@@ -194,7 +213,7 @@
       if (filePath === undefined) {
         return
       }
-      fs.writeFile(filePath, printLrc(), function (err) {
+      fs.writeFile(filePath, serializeInputs(), function (err) {
         if (!err) {
           dialog.showMessageBox({
             message: 'The file has been saved!',
