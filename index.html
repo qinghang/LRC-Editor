@@ -19,56 +19,19 @@
         cursor: pointer;
         background: #eff2f7;
       }
+      button:focus {
+        outline: none;
+      }
       button {
         margin-right: 5px;
         height: 19px;
         border: 1px solid #96a1b1;
-        background: lightsteelblue;
         color: #323c4c;
         border-radius: 3px;
-        box-shadow: 1px 2px #323c4c;
       }
       .nav button {
         height: 30px;
       }
-      .lrc-rows-container {
-        max-height: 415px;
-        overflow: scroll;
-        overflow-x: hidden;
-        background: #495C70;
-        padding: 10px;
-        box-shadow: 1px 1px 5px grey;
-      }
-      .lrc-row button {
-        background: #74777d;
-        color: #355565;
-      }
-      .lrc-row button:hover {
-        background:lightsteelblue;
-      }
-      
-      /* style scrollbar */
-      ::-webkit-scrollbar {     
-        background-color: #e8e8e8;
-        width: .8em
-      }
-      ::-webkit-scrollbar-thumb:window-inactive,
-      ::-webkit-scrollbar-thumb {
-        background:  #c1c1c1;
-      }
-      /* style input */
-      .input-style {
-        border: none;
-        border-bottom: 1px dashed #83A4C5;
-        background: transparent;
-        outline: none;
-        color: #d3dce6;
-        margin: 5px;
-      }
-      .input-style:focus {
-        border-bottom: 1px dashed #03A9F4;
-      }
-
       .app-container {
         width: 700px;
         margin: 0 auto;
@@ -91,6 +54,43 @@
       }
       .submit-btn:hover {
         cursor: pointer;
+      }
+      /* edit section */
+      .lrc-rows-container {
+        max-height: 400px;
+        overflow: scroll;
+        overflow-x: hidden;
+        background: #495C70;
+        padding: 10px;
+        box-shadow: 1px 1px 5px grey;
+      }
+      .lrc-row button {
+        background: #74777d;
+        color: #355565;
+      }
+      .lrc-row button:hover {
+        background:lightsteelblue;
+      }
+      /* style scrollbar */
+      ::-webkit-scrollbar {     
+        background-color: #e8e8e8;
+        width: .8em
+      }
+      ::-webkit-scrollbar-thumb:window-inactive,
+      ::-webkit-scrollbar-thumb {
+        background:  #c1c1c1;
+      }
+      /* style input */
+      .input-style {
+        border: none;
+        border-bottom: 1px dashed #83A4C5;
+        background: transparent;
+        outline: none;
+        color: #d3dce6;
+        margin: 5px;
+      }
+      .input-style:focus {
+        border-bottom: 1px dashed #03A9F4;
       }
     </style>
   </head>
@@ -116,7 +116,7 @@
                   <textarea name="lyrics" id="lyrics" cols="50" rows="10" value=""></textarea>
                 </div>
                 <div class="upload-file" style="display:none;">
-                    <label for="lyricsFile">Edit Exist LRC File: </label><br>
+                    <label for="lyricsFile">Edit Exist LRC File (only accept .doc, .docx, .lrc, .txt extention files): </label><br>
                     <input id="lrcFile" type="file" name="lrcFile" accept=".doc,.docx, .lrc, .txt" style="margin-top:10px;">
                 </div>
             </div>
@@ -129,16 +129,16 @@
     
         <form id="editForm" style="display:none;">
           <div style="margin-bottom:10px;">
-              <span>Current Time:</span>
-              <span id="currentTime">00:00.00</span>
+              <span><b>Current Time:</b></span>
+              <span id="currentTime" style="color:#2aa198; font-size:18px;">00:00.00</span>
           </div>
           <div id="lrc" class="lrc-rows-container"></div>
-          <br>
+          <p style="margin-bottom: 5px;">JUMP: Play the song in that line; &nbsp;&nbsp;INSERT: Insert the current time to the time field</p>
           <hr>
           <div style="display:flex;" class="nav">
             <button id="backBtn" type="button">Back</button>
-            <button id="saveBtn" type="button">Save</button>
-            <button id="resetAudioBtn" type="button">Reset Audio</button>
+            <button id="saveBtn" type="button">Save File</button>
+            <button id="resetAudioBtn" type="button">Reset to Start</button>
             <div id="audio-holder" style="padding:0 5px;">
               <audio id="myAudio" src="" controls></audio>
             </div>

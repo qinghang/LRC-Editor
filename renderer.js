@@ -86,7 +86,7 @@
     let lyric_arr = []
     const val = $('#upload-select').value;
     if(val === 'paste'){
-      lyric_arr = pasteLyrics()
+      lyric_arr = lyricPaste()
     }
     if(val === 'edit'){
       lyric_arr = file_lyric
@@ -100,7 +100,7 @@
     resetAudio ()
   }
 
-  function pasteLyrics () {
+  function lyricPaste () {
     const lyric_lines = $('#lyrics').value.split('\n')
     let lyricArr = []
     lyric_lines.forEach(function (line) {
@@ -150,7 +150,7 @@
     let lrc = '<div class="lrc-row">'
     lyricsArr.forEach(function (item) {
       lrc += '<button type="button" class="jumpTimeBtn">JUMP</button>'
-      lrc += '<button type="button" class="enterTimeBtn">ENTER</button>'
+      lrc += '<button type="button" class="enterTimeBtn">INSERT</button>'
       lrc +=
         '<input class="timeInput input-style" style="font-size:16px;" type="text" size="15" value="' +
         item[0] +
@@ -214,8 +214,8 @@
       let lyrics = []
       fileLines.forEach(function (line) {
         let lineArr = []
-        const hasTime = line.match(/\[(.*?)\]/)
-        lineArr[0] = hasTime ? hasTime[1] : ''
+        const hasBrackets = line.match(/\[(.*?)\]/)
+        lineArr[0] = hasBrackets && validateTimeField(hasBrackets[1]) ? hasBrackets[1] : '00:00.00'
         lineArr[1] = line.substr(line.indexOf(']') + 1)
         lyrics.push(lineArr)
       })
@@ -224,4 +224,16 @@
       dialog.showErrorBox('Error reading the file')
     }
   }
+
+  function validateTimeField(str){
+    if(str.length !== 8 || str[2] !== ':' || str[5] !== '.'){
+      return false
+    }
+    const numStr = str.replace(/[:.]/g, '');
+    if(isNaN(numStr)){
+      return false
+    }
+    return true
+  }
+
 })() // end closure
